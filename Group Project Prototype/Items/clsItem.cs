@@ -12,6 +12,9 @@ namespace Group_Project_Prototype.Items
         /// the code for the item
         /// </summary>
         private string sCode;
+        /// <summary>
+        /// the items cost
+        /// </summary>
         private string sCost;
         private string sDesc;
 

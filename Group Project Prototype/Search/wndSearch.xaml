@@ -1,0 +1,62 @@
+﻿<Window x:Class="Group_Project_Prototype.Search.wndSearch"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Group_Project_Prototype.Search"
+        mc:Ignorable="d"
+        Title="wndSearch" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1.5*"/>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <GroupBox Grid.Row="0" Header="Filters">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Label x:Name="lblStart" Content="Start Date:" Grid.Row="0" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,0,5,2.5"/>
+                    <Label x:Name="lblEnd" Content="End Date:" Grid.Row="1" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,2.5,5,0"/>
+                </Grid>
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <DatePicker x:Name="dateStart" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Margin="5,0,5,2.5" SelectedDateChanged="dateStart_SelectedDateChanged"/>
+                    <DatePicker x:Name="dateEnd" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Margin="5,2.5,5,0" SelectedDateChanged="dateEnd_SelectedDateChanged"/>
+                </Grid>
+                <Grid Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <ComboBox x:Name="cboNumber" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Margin="5,0,5,2.5" Text="Select Invoice Number" IsEditable="True" IsReadOnly="True" SelectionChanged="cboNumber_SelectionChanged"/>
+                    <ComboBox x:Name="cboCharge" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Margin="5,2.5,5,0" Text="Select Total Charge Amount" IsEditable="True" IsReadOnly="True" SelectionChanged="cboCharge_SelectionChanged"/>
+                </Grid>
+                <Button x:Name="btnClearFilters" Grid.Column="3" Content="Clear Filters" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,0,5,0" Click="btnClearFilters_Click"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox Grid.Row="1" Header="Invoices">
+            <DataGrid x:Name="dgrdInvoices" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,5"/>
+        </GroupBox>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="btnSelect" Content="Select" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,5" Click="btnSelect_Click"/>
+            <Button x:Name="btnCancel" Content="Cancel" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,5" Click="btnCancel_Click"/>
+        </Grid>
+    </Grid>
+</Window>

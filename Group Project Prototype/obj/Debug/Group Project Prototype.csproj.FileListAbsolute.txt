@@ -1,0 +1,19 @@
+C:\Users\austi\Documents\CS 3280\Group Project Prototype\bin\Debug\Group Project Prototype.exe.config
+C:\Users\austi\Documents\CS 3280\Group Project Prototype\bin\Debug\Group Project Prototype.exe
+C:\Users\austi\Documents\CS 3280\Group Project Prototype\bin\Debug\Group Project Prototype.pdb
+C:\Users\austi\Documents\CS 3280\Group Project Prototype\obj\Debug\Group Project Prototype.csprojAssemblyReference.cache
+C:\Users\austi\Documents\CS 3280\Group Project Prototype\obj\Debug\App.g.cs
+C:\Users\austi\Documents\CS 3280\Group Project Prototype\obj\Debug\Group Project Prototype_MarkupCompile.cache
+C:\Users\austi\Documents\CS 3280\Group Project Prototype\obj\Debug\Group Project Prototype_MarkupCompile.lref
+C:\Users\austi\Documents\CS 3280\Group Project Prototype\obj\Debug\Group Project Prototype.g.resources
+C:\Users\austi\Documents\CS 3280\Group Project Prototype\obj\Debug\Group_Project_Prototype.Properties.Resources.resources
+C:\Users\austi\Documents\CS 3280\Group Project Prototype\obj\Debug\Group Project Prototype.csproj.GenerateResource.cache
+C:\Users\austi\Documents\CS 3280\Group Project Prototype\obj\Debug\Group Project Prototype.csproj.CoreCompileInputs.cache
+C:\Users\austi\Documents\CS 3280\Group Project Prototype\obj\Debug\Group Project Prototype.exe
+C:\Users\austi\Documents\CS 3280\Group Project Prototype\obj\Debug\Group Project Prototype.pdb
+C:\Users\austi\Documents\CS 3280\Group Project Prototype\obj\Debug\Items\wndItems.g.cs
+C:\Users\austi\Documents\CS 3280\Group Project Prototype\obj\Debug\Search\wndSearch.g.cs
+C:\Users\austi\Documents\CS 3280\Group Project Prototype\obj\Debug\Items\wndItems.baml
+C:\Users\austi\Documents\CS 3280\Group Project Prototype\obj\Debug\Search\wndSearch.baml
+C:\Users\austi\Documents\CS 3280\Group Project Prototype\obj\Debug\Main\MainWindow.g.cs
+C:\Users\austi\Documents\CS 3280\Group Project Prototype\obj\Debug\Main\MainWindow.baml

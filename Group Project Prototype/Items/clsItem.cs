@@ -8,6 +8,9 @@ namespace Group_Project_Prototype.Items
 {
     public class clsItem
     {
+        /// <summary>
+        /// the code for the item
+        /// </summary>
         private string sCode;
         private string sCost;
         private string sDesc;

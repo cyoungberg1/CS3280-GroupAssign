@@ -16,6 +16,8 @@ namespace Group_Project_Prototype.Main
         //method to update, select and delete
     }
 
+    int selectedInvoice;
+
     /// <summary>
     /// Class to hold invoice attributes.
     /// </summary>

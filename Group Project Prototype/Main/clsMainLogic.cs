@@ -16,6 +16,7 @@ namespace Group_Project_Prototype.Main
         //method to update, select and delete
     }
 
+    // selected invoice from the search screen
     int selectedInvoice;
 
     /// <summary>

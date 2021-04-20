@@ -17,7 +17,6 @@ namespace Group_Project_Prototype.Main
     }
 
     // selected invoice from the search screen
-    int selectedInvoice;
 
     /// <summary>
     /// Class to hold invoice attributes.

@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 //THIS IS A TEST COMMENT
+//Here is another test comment
 
 namespace Group_Project_Prototype.Search
 {

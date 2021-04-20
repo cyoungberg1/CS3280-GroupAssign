@@ -54,9 +54,9 @@ namespace Group_Project_Prototype.Main
         /// <param name="lineItemNum"></param>
         /// <param name="itemCode"></param>
         /// <returns>SQL string</returns>
-        public string InsertLineItem(int invoiceNum, int lineItemNum, char itemCode)
+        public string InsertLineItem(int invoiceNum, int lineItemNum, string itemCode)
         {
-            string sql = "INSERT INTO LineItems (InvoiceNum, LineItemNum, ItemCode) VALUES (" + invoiceNum + "," + lineItemNum + "," + itemCode;
+            string sql = "INSERT INTO LineItems (InvoiceNum, LineItemNum, ItemCode) VALUES (" + invoiceNum + "," + lineItemNum + ", " + "'" + itemCode + "')";
             return sql;
         }
         /// <summary>
@@ -65,9 +65,9 @@ namespace Group_Project_Prototype.Main
         /// <param name="date"></param>
         /// <param name="cost"></param>
         /// <returns>SQL string</returns>
-        public string InsertInvoice(string date, double cost)
+        public string InsertInvoice(string date, string cost)
         {
-            string sql = "INSERT into Invoices (InvoiceDate, TotalCost) VALUES (#" + date + "# ," + cost + ")";
+            string sql = "INSERT into Invoices (InvoiceDate, TotalCost) VALUES (#" + date + "#, " + cost + ")";
             return sql;
         }
         /// <summary>

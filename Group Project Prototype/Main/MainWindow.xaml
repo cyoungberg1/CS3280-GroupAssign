@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Group_Project_Prototype.Main"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" WindowStartupLocation="CenterScreen">
 
 
     <Grid>
@@ -21,26 +21,34 @@
             <TextBox AcceptsReturn="True" />
         </DockPanel>
         <Button x:Name="addInvoiceBtn" Content="Add New Invoice" HorizontalAlignment="Left" Margin="368,47,0,0" VerticalAlignment="Top" Width="129" Height="29" Click="addInvoiceBtn_Click"/>
-        <Button x:Name="editInvoiceBtn" Content="Edit Selected Invoice" HorizontalAlignment="Left" Margin="508,46,0,0" VerticalAlignment="Top" Width="129" Height="29"/>
-        <Button x:Name="deleteInvoiceBtn" Content="Delete Selected Invoice" HorizontalAlignment="Left" Margin="649,46,0,0" VerticalAlignment="Top" Width="130" Height="29"/>
+        <Button x:Name="editInvoiceBtn" Content="Edit Selected Invoice" HorizontalAlignment="Left" Margin="508,46,0,0" VerticalAlignment="Top" Width="129" Height="29" Click="editInvoiceBtn_Click"/>
+        <Button x:Name="deleteInvoiceBtn" Content="Delete Selected Invoice" HorizontalAlignment="Left" Margin="649,46,0,0" VerticalAlignment="Top" Width="130" Height="29" Click="deleteInvoiceBtn_Click"/>
         <DataGrid x:Name="selectedInvoiceDataGrid" HorizontalAlignment="Left" Height="296" Margin="41,100,0,0" VerticalAlignment="Top" Width="318" CanUserAddRows="False"/>
         <Label x:Name="companyNameLbl" Content="Company Name" HorizontalAlignment="Left" Margin="38,33,0,0" VerticalAlignment="Top" Height="48" Width="318" FontSize="26"/>
         <Canvas x:Name="addInvoiceCanvas" HorizontalAlignment="Left" Height="296" Margin="383,100,0,0" VerticalAlignment="Top" Width="371">
-            <ComboBox x:Name="itemsComboBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Canvas.Left="10" Canvas.Top="64"/>
+            <ComboBox x:Name="itemsComboBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="141" Canvas.Left="10" Canvas.Top="64" SelectionChanged="itemsComboBox_SelectionChanged"/>
             <TextBox x:Name="itemCostTxtBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Right" IsReadOnly="True" Canvas.Left="168" Canvas.Top="63"/>
             <Label x:Name="itemLbl" Content="Item:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Canvas.Left="6" Canvas.Top="38"/>
             <Label x:Name="itemCostLbl" Content="Item Cost:" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.434,0.858" Width="91" Canvas.Left="184" Canvas.Top="38"/>
-            <TextBox x:Name="invoiceDataTxtBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="DD/MM/YYYY" VerticalAlignment="Top" Width="120" Canvas.Left="10" Canvas.Top="10"/>
             <Label x:Name="dateLbl" Content="Date:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Canvas.Left="7" Canvas.Top="-15"/>
             <DataGrid x:Name="workingInvoiceDataGrid" HorizontalAlignment="Left" Height="138" VerticalAlignment="Top" Width="356" Canvas.Left="10" Canvas.Top="157"/>
             <TextBox x:Name="totalCostTxtBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Right" IsReadOnly="True" Canvas.Left="290" Canvas.Top="64"/>
             <Label x:Name="totalCostLbl" Content="Total Cost:" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.434,0.858" Width="91" Canvas.Left="305" Canvas.Top="39"/>
             <Label x:Name="workingInvoiceLbl" Content="Working Invoice" Canvas.Left="6" Canvas.Top="131"/>
-            <Button x:Name="addItemBtn" Content="Add Item" HorizontalAlignment="Left" VerticalAlignment="Top" Width="94" Height="26" Canvas.Left="10" Canvas.Top="101"/>
-            <Button x:Name="saveInvoiceBtn" Content="Save Invoice" HorizontalAlignment="Left" VerticalAlignment="Top" Width="94" Height="26" Canvas.Left="271" Canvas.Top="101"/>
+            <Button x:Name="addItemBtn" Content="Add Item" HorizontalAlignment="Left" VerticalAlignment="Top" Width="94" Height="26" Canvas.Left="10" Canvas.Top="101" Click="addItemBtn_Click"/>
+            <Button x:Name="saveInvoiceBtn" Content="Save Invoice" HorizontalAlignment="Left" VerticalAlignment="Top" Width="94" Height="26" Canvas.Left="271" Canvas.Top="101" Click="saveInvoiceBtn_Click"/>
+            <DatePicker x:Name="invoiceDate" Canvas.Left="8" Canvas.Top="8"/>
+            <Button x:Name="clearInvoiceBtn" Content="Clear" HorizontalAlignment="Left" VerticalAlignment="Top" Width="94" Height="26" Canvas.Left="109" Canvas.Top="101" Click="clearInvoiceBtn_Click"/>
 
         </Canvas>
+
         <Label x:Name="selectedInvoiceLbl" Content="Selected Invoice" HorizontalAlignment="Left" Margin="39,76,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.181,0.427" Width="145"/>
+
+        <Canvas x:Name="invoiceAddedCanvas" HorizontalAlignment="Left" Height="183" Margin="443,165,0,0" VerticalAlignment="Top" Width="240" Visibility="Hidden">
+            <Label Content="Invoiced added. Create another?" HorizontalAlignment="Left" VerticalAlignment="Top" Height="37" Width="267" FontSize="14" Canvas.Left="16" Canvas.Top="10"/>
+            <Button x:Name="addInvoiceBtn2" Content="Add New Invoice" HorizontalAlignment="Left" VerticalAlignment="Top" Width="129" Height="29" Click="addInvoiceBtn_Click" Canvas.Left="53" Canvas.Top="47"/>
+
+        </Canvas>
 
     </Grid>
 </Window>

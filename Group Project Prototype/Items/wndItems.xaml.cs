@@ -20,15 +20,13 @@ namespace Group_Project_Prototype.Items
     /// </summary>
     public partial class wndItems : Window
     {
-        clsItemsSQL SQLCalls;
         clsItemsLogic itemsLogic;
         string sSelectedCode;
 
         public wndItems()
         {
             InitializeComponent();
-            SQLCalls = new clsItemsSQL();
-            itemsLogic = new clsItemsLogic(SQLCalls);
+            itemsLogic = new clsItemsLogic();
 
             //call get items in logic - apply to cbItems.ItemsSource
 

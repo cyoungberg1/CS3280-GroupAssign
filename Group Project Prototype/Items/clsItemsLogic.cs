@@ -12,10 +12,12 @@ namespace Group_Project_Prototype.Items
     {
         private clsItemsSQL SQLCalls;
         private clsItem item;
+        private clsDataAccess data;
 
-        public clsItemsLogic(clsItemsSQL SQLCalls)
+        public clsItemsLogic()
         {
-            this.SQLCalls = SQLCalls;
+            SQLCalls = new clsItemsSQL();
+            data = new clsDataAccess();
         }
 
         public void DeleteItem(string code)

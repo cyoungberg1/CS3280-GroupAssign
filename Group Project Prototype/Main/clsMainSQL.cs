@@ -22,8 +22,20 @@ namespace Group_Project_Prototype.Main
         /// <returns>SQL string</returns>
         public string UpdateInvoice(int cost, int invoiceNum)
         {
-            string sql = "UPDATE Invoices SET TotalCost =" + cost + "WHERE InvoiceNum =" + invoiceNum;
+            string sql = "UPDATE Invoices SET TotalCost = " + cost + " WHERE InvoiceNum = " + invoiceNum;
             return sql;
+        }
+        /// <summary>
+        /// SQL used to update line items for an invoice.
+        /// </summary>
+        /// <param name="invoiceNum"></param>
+        /// <param name="lineItemNum"></param>
+        /// <param name="itemCode"></param>
+        /// <returns></returns>
+        public string UpdateLineItem(int invoiceNum, int lineItemNum, string itemCode)
+        {
+            //return "UPDATE LineItems SET LineItemNum = " + lineItemNum + ", ItemCode = '" + itemCode + "' WHERE InvoiceNum = " + invoiceNum;
+            return "UPDATE LineItems SET ItemCode = '" + itemCode + "' WHERE InvoiceNum = " + invoiceNum + " AND LineItemNum = " + lineItemNum;
         }
         /// <summary>
         /// SQL used to delete a LineItem entry.
@@ -32,10 +44,9 @@ namespace Group_Project_Prototype.Main
         /// <param name="lineItemNum"></param>
         /// <param name="itemCode"></param>
         /// <returns>SQL string</returns>
-        public string DeleteLineItem(int invoiceNum, int lineItemNum, char itemCode)
+        public string DeleteLineItem(int invoiceNum)
         {
-            string sql = "DELETE FROM LineItems (InvoiceNum, LineItemNum, ItemCode) VALUES (" + invoiceNum + "," + lineItemNum + "," + itemCode;
-            return sql;
+            return "DELETE FROM LineItems WHERE InvoiceNum = " + invoiceNum;
         }
         /// <summary>
         /// SQL used to delete an invoice.
@@ -44,8 +55,7 @@ namespace Group_Project_Prototype.Main
         /// <returns>SQL string</returns>
         public string DeleteInvoice(int invoiceNum)
         {
-            string sql = "DELETE FROM Invoices WHERE InvoiceNum =" + invoiceNum;
-            return sql;
+            return "DELETE FROM Invoices WHERE InvoiceNum = " + invoiceNum;
         }
         /// <summary>
         /// SQL used to insert a line item.

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,7 +33,7 @@ namespace Group_Project_Prototype.Main
         /// <summary>
         /// List of clsItem objects for an invoice.
         /// </summary>
-        List<Items.clsItem> InvoiceItems = new List<Items.clsItem>();
+        ObservableCollection<Items.clsItem> WorkingInvoiceItems = new ObservableCollection<Items.clsItem>();
 
         /// <summary>
         /// The currently selected invoice to be viewed edited or deleted
@@ -41,22 +43,21 @@ namespace Group_Project_Prototype.Main
         /// <summary>
         /// Full list of available items.
         /// </summary>
-        BindingList<Items.clsItem> itemsList;
+        ObservableCollection<Items.clsItem> itemsList;
+
+        ObservableCollection<Items.clsItem> dgItems;
 
         /// <summary>
         /// Gets all items.
         /// </summary>
         /// <returns>A list of item objects.</returns>
-        public BindingList<Items.clsItem> GetItems()
+        public ObservableCollection<Items.clsItem> GetItems()
         {
             int retVal = 0;
             string itemsSQL = sql.SelectItems();
             ds = data.ExecuteSQLStatement(itemsSQL, ref retVal);
 
-            //testing
-            //end testing
-
-            itemsList = new BindingList<Items.clsItem>();
+            itemsList = new ObservableCollection<Items.clsItem>();
             Items.clsItem item;
 
             for (int i = 0; i < retVal; i++)
@@ -74,16 +75,16 @@ namespace Group_Project_Prototype.Main
         /// <param name="item"></param>
         public void AddItem(Items.clsItem item)
         {
-            InvoiceItems.Add(item);
+            WorkingInvoiceItems.Add(item);
         }
 
         /// <summary>
         /// Gets a list of items on the current working invoice.
         /// </summary>
         /// <returns></returns>
-        public List<Items.clsItem> GetInvoiceList()
+        public ObservableCollection<Items.clsItem> GetInvoiceList()
         {
-            return InvoiceItems;
+            return WorkingInvoiceItems;
         }
 
         /// <summary>
@@ -93,11 +94,21 @@ namespace Group_Project_Prototype.Main
         public string GetInvoiceCost()
         {
             int cost = 0;
-            for (int i = 0; i < InvoiceItems.Count; i++)
+            for (int i = 0; i < WorkingInvoiceItems.Count; i++)
             {
-                cost += Int32.Parse(InvoiceItems[i].Cost);
+                cost += Int32.Parse(WorkingInvoiceItems[i].Cost);
             }
             return cost.ToString();
+        }
+
+        public int GetSelectedInvoiceCost()
+        {
+            int cost = 0;
+            for (int i = 0; i < dgItems.Count; i++)
+            {
+                cost += Int32.Parse(dgItems[i].Cost);
+            }
+            return cost;
         }
 
         /// <summary>
@@ -105,7 +116,7 @@ namespace Group_Project_Prototype.Main
         /// </summary>
         public void clearInvoice()
         {
-            InvoiceItems.Clear();
+            WorkingInvoiceItems.Clear();
         }
 
         /// <summary>
@@ -120,16 +131,96 @@ namespace Group_Project_Prototype.Main
             data.ExecuteNonQuery(insertInvoiceSQL);
 
             string invoiceNumber = data.ExecuteScalarSQL("SELECT MAX(InvoiceNum) FROM Invoices");
+            selectedInvoice = Int32.Parse(invoiceNumber);
 
             string insertLineItemSQL;
 
+            dgItems = new ObservableCollection<Items.clsItem>();
+
             // insert a line item for each item on the invoice
-            for (int i = 0; i < InvoiceItems.Count; i++)
+            for (int i = 0; i < WorkingInvoiceItems.Count; i++)
             {
-                insertLineItemSQL = sql.InsertLineItem(Int32.Parse(invoiceNumber), (i+1), InvoiceItems[i].Code);
+                dgItems.Add(WorkingInvoiceItems[i]);
+
+                insertLineItemSQL = sql.InsertLineItem(Int32.Parse(invoiceNumber), (i+1), WorkingInvoiceItems[i].Code);
                 data.ExecuteNonQuery(insertLineItemSQL);
             }
+
+            
         }
+
+        /// <summary>
+        /// Displays the currently selected invoice in the selected invoice datagrid.
+        /// </summary>
+        /// <returns>An obvservable collection of invoices.</returns>
+        public ObservableCollection<Items.clsItem> DisplayInvoie()
+        {
+            string getInvoiceSQL = sql.SelectLineItem(selectedInvoice);
+
+            int retVal = 0;
+            ds = data.ExecuteSQLStatement(getInvoiceSQL, ref retVal);
+
+            dgItems = new ObservableCollection<Items.clsItem>();
+            Items.clsItem item;
+
+            for (int i = 0; i < retVal; i++)
+            {
+                item = new Items.clsItem(ds.Tables[0].Rows[i][0].ToString(), ds.Tables[0].Rows[i][2].ToString(), ds.Tables[0].Rows[i][1].ToString());
+                dgItems.Add(item);
+            }
+
+            return dgItems;
+        }
+
+        /// <summary>
+        /// Updates the dgItems collection.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="index"></param>
+        public void UpdateDataGridItem(Items.clsItem item, int index)
+        {
+            dgItems[index] = item;
+        }
+
+        /// <summary>
+        /// Updates an invoice.
+        /// </summary>
+        /// <param name="invoiceNum">The invoice number.</param>
+        /// <param name="lineItemNum">The line item number.</param>
+        /// <param name="itemCode">The item code.</param>
+        public void UpdateInvoice(int invoiceNum, int lineItemNum, string itemCode)
+        {
+            string updateLineItemSQL = sql.UpdateLineItem(invoiceNum, lineItemNum, itemCode);
+            data.ExecuteNonQuery(updateLineItemSQL);
+
+            string updateInvoiceSQL = sql.UpdateInvoice(GetSelectedInvoiceCost(), invoiceNum);
+            data.ExecuteNonQuery(updateInvoiceSQL);
+        }
+
+        /// <summary>
+        /// Deletes an invoice.
+        /// </summary>
+        /// <param name="invoiceNum">The invoice number.</param>
+        public void DeleteInvoice(int invoiceNum)
+        {
+            string deleteLineItemSQL = sql.DeleteLineItem(invoiceNum);
+            data.ExecuteNonQuery(deleteLineItemSQL);
+
+            string deleteInvoiceSQL = sql.DeleteInvoice(invoiceNum);
+            data.ExecuteNonQuery(deleteInvoiceSQL);
+
+            dgItems.Clear();
+        }
+
+        /// <summary>
+        /// Removes an item from the working invoice list.
+        /// </summary>
+        /// <param name="index"></param>
+        public void DeleteWorkingInvoiceItem(int index)
+        {
+            WorkingInvoiceItems.RemoveAt(index);
+        }
+
 
         /// <summary>
         /// Getter and setter for the selectedInvoice field.
@@ -137,7 +228,9 @@ namespace Group_Project_Prototype.Main
         public int selectedInvoice
         {
             get { return iSelectedInvoice; }
-            set { iSelectedInvoice = value; }
+            set { 
+                iSelectedInvoice = value; 
+            }
         }
 
     }

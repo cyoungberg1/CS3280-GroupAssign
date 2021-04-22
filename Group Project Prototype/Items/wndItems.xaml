@@ -5,21 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Group_Project_Prototype.Items"
         mc:Ignorable="d"
-        Title="wndItems" Height="372.799" Width="430.248">
+        Title="wndItems" Height="372.799" Width="430.248" WindowStartupLocation="CenterScreen">
     <Grid>
-        <ComboBox x:Name="cbItems" HorizontalAlignment="Left" Margin="39,107,0,0" VerticalAlignment="Top" Width="148" SelectionChanged="cbItems_SelectionChanged"/>
-        <Label x:Name="lblSelect" Content="Select Item" HorizontalAlignment="Left" Margin="39,76,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="cbItems" HorizontalAlignment="Left" Margin="10,107,0,0" VerticalAlignment="Top" Width="195" SelectionChanged="cbItems_SelectionChanged"/>
+        <Label x:Name="lblSelect" Content="Select Item" HorizontalAlignment="Left" Margin="25,81,0,0" VerticalAlignment="Top"/>
         <Button x:Name="btnDelete" Content="Delete Item" HorizontalAlignment="Left" Margin="56,172,0,0" VerticalAlignment="Top" Width="75" Click="btnDelete_Click"/>
-        <GroupBox x:Name="gbEdit" Header="Edit Item" HorizontalAlignment="Left" Height="181" Margin="210,76,0,0" VerticalAlignment="Top" Width="190">
+        <GroupBox x:Name="gbEdit" Header="Edit Item" HorizontalAlignment="Left" Height="219" Margin="210,76,0,0" VerticalAlignment="Top" Width="190">
             <Grid>
                 <Label x:Name="lblCost" Content="Cost:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
                 <TextBox x:Name="tbCost" HorizontalAlignment="Left" Height="23" Margin="10,36,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="158"/>
                 <Label x:Name="lblDesc" Content="Descitption:" HorizontalAlignment="Left" Margin="10,64,0,0" VerticalAlignment="Top"/>
                 <TextBox x:Name="tbDesc" HorizontalAlignment="Left" Height="23" Margin="10,89,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="158"/>
                 <Button x:Name="btnEdit" Content="Edit Item" HorizontalAlignment="Left" Margin="50,129,0,0" VerticalAlignment="Top" Width="75" Click="btnEdit_Click"/>
+                <Button x:Name="btnAddItem" Content="Add As New Item" HorizontalAlignment="Left" Margin="24,156,0,0" VerticalAlignment="Top" Width="129" Click="btnAddItem_Click"/>
             </Grid>
         </GroupBox>
         <Button x:Name="btnMain" Content="Back to main page" HorizontalAlignment="Left" Margin="141,300,0,0" VerticalAlignment="Top" Width="120" Click="btnMain_Click"/>
+        <Label x:Name="lblError" Content="" HorizontalAlignment="Left" Margin="10,240,0,0" VerticalAlignment="Top" Foreground="Red" Width="195"/>
 
     </Grid>
 </Window>

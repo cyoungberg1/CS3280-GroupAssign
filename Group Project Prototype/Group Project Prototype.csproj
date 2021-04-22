@@ -63,6 +63,8 @@
     <Compile Include="Main\clsMainLogic.cs" />
     <Compile Include="Main\clsMainSQL.cs" />
     <Compile Include="Main\MainWindow.xaml.cs" />
+    <Compile Include="Search\clsGetInvoiceCost.cs" />
+    <Compile Include="Search\clsGetInvoiceNumber.cs" />
     <Compile Include="Search\clsSearchLogic.cs" />
     <Compile Include="Search\clsSearchSQL.cs" />
     <Compile Include="Search\wndSearch.xaml.cs" />

@@ -17,11 +17,19 @@ namespace Group_Project_Prototype.Search
         }
 
         /// <summary>
+        /// set query to search all
+        /// </summary>
+        public static string searchDistinct()
+        {
+            return "SELECT DISTINCT TotalCost FROM Invoices ORDER BY TotalCost";
+        }
+
+        /// <summary>
         /// set query to filter by date range
         /// </summary>
         /// <param name="dateStart">date variable for start date</param>
         /// <param name="dateEnd">date variable for end date</param>
-        public static string searchDate(DateTime dateStart, DateTime dateEnd)
+        public static string searchDate(string dateStart, string dateEnd)
         {
             return "SELECT * FROM Invoices WHERE InvoiceDate BETWEEN #" + dateStart + "# AND #" + dateEnd + "#";
         }
@@ -30,7 +38,7 @@ namespace Group_Project_Prototype.Search
         /// set query to filter by invoice number
         /// </summary>
         /// <param name="invoiceNumber">int variable for invoice number</param>
-        public static string searchNum(int invoiceNumber)
+        public static string searchNum(string invoiceNumber)
         {
             return "SELECT * FROM Invoices WHERE InvoiceNum = " + invoiceNumber;
         }
@@ -39,7 +47,7 @@ namespace Group_Project_Prototype.Search
         /// set query to filter by cost
         /// </summary>
         /// <param name="cost">int variable for total invoice cost</param>
-        public static string searchCost(int cost)
+        public static string searchCost(string cost)
         {
             return "SELECT * FROM Invoices WHERE TotalCost = " + cost;
         }
@@ -50,7 +58,7 @@ namespace Group_Project_Prototype.Search
         /// <param name="dateStart">date variable for start date</param>
         /// <param name="dateEnd">date variable for end date</param>
         /// <param name="invoiceNumber">int variable for invoice number</param>
-        public static string searchDateNum(DateTime dateStart, DateTime dateEnd, int invoiceNumber)
+        public static string searchDateNum(string dateStart, string dateEnd, string invoiceNumber)
         {
             return "SELECT * FROM Invoices WHERE InvoiceNum = " + invoiceNumber + " AND InvoiceDate BETWEEN #" + dateStart + "# AND #" + dateEnd + "#";
         }
@@ -61,7 +69,7 @@ namespace Group_Project_Prototype.Search
         /// <param name="dateStart">date variable for start date</param>
         /// <param name="dateEnd">date variable for end date</param>
         /// <param name="cost">int variable for total cost</param>
-        public static string searchDateCost(DateTime dateStart, DateTime dateEnd, int cost)
+        public static string searchDateCost(string dateStart, string dateEnd, string cost)
         {
             return "SELECT * FROM Invoices WHERE TotalCost = " + cost + " AND InvoiceDate BETWEEN #" + dateStart + "# AND #" + dateEnd + "#";
         }
@@ -71,7 +79,7 @@ namespace Group_Project_Prototype.Search
         /// </summary>
         /// <param name="cost">int variable for total cost</param>
         /// <param name="invoiceNumber">int variable for invoice number</param>
-        public static string searchCostNum(int cost, int invoiceNumber)
+        public static string searchCostNum(string cost, string invoiceNumber)
         {
             return "SELECT * FROM Invoices WHERE InvoiceNum = " + invoiceNumber + " AND TotalCost = " + cost;
         }
@@ -83,7 +91,7 @@ namespace Group_Project_Prototype.Search
         /// <param name="dateEnd">date variable for end date</param>
         /// <param name="cost">int variable for total cost</param>
         /// <param name="invoiceNumber">int variable for invoice number</param>
-        public static string searchAll(DateTime dateStart, DateTime dateEnd, int cost, int invoiceNumber)
+        public static string searchAll(string dateStart, string dateEnd, string cost, string invoiceNumber)
         {
             return "SELECT * FROM Invoices WHERE InvoiceNum = " + invoiceNumber + " AND InvoiceDate BETWEEN #" + dateStart + "# AND #" + dateEnd + "# AND TotalCost = " + cost;
         }

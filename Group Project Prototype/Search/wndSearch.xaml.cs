@@ -14,9 +14,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-//THIS IS A TEST COMMENT
-//Here is another test comment
-
 namespace Group_Project_Prototype.Search
 {
     /// <summary>
@@ -28,18 +25,35 @@ namespace Group_Project_Prototype.Search
     /// </summary>
     public partial class wndSearch : Window
     {
+        clsSearchLogic logic = new clsSearchLogic();
+        clsGetInvoiceNumber number = new clsGetInvoiceNumber();
+        clsGetInvoiceCost cost = new clsGetInvoiceCost();
+
         /// <summary>
         /// initialize the search window
         /// </summary>
         public wndSearch()
         {
             InitializeComponent();
+            loadInvoices();
+            number.getInvoiceNumber();
+            cost.getInvoiceCost();
+            foreach (clsGetInvoiceNumber.Invoice item in number.numberList)
+            {
+                cboNumber.Items.Add(item);
+            }
+            foreach (clsGetInvoiceCost.Invoice item in cost.costList)
+            {
+                cboCharge.Items.Add(item);
+            }
         }
 
-        /// <summary>
-        /// this is where the selected invoice number will be stored so that the main window can access it.
-        /// </summary>
-        int invoiceNumber;
+        private void loadInvoices()
+        {
+            logic.getInvoiceData();
+            dgrdInvoices.ItemsSource = null;
+            dgrdInvoices.ItemsSource = logic.invoiceList;
+        }
 
         /// <summary>
         /// method to handle the select button click event
@@ -53,6 +67,8 @@ namespace Group_Project_Prototype.Search
             try
             {
                 //close this window
+                clsSearchLogic.Invoice selectedInvoice = (clsSearchLogic.Invoice)dgrdInvoices.SelectedItem;
+                //wndMain.asdf = selectedInvoice.number;
                 this.Close();
             }
             catch (Exception ex)
@@ -111,7 +127,13 @@ namespace Group_Project_Prototype.Search
         {
             try
             {
-
+                dateStart.SelectedDate = null;
+                dateEnd.SelectedDate = null;
+                cboCharge.SelectedItem = null;
+                cboCharge.Text = "Select Total Charge Amount";
+                cboNumber.SelectedItem = null;
+                cboNumber.Text = "Select Invoice Number";
+                logic.getInvoiceData();
             }
             catch (Exception ex)
             {
@@ -127,11 +149,22 @@ namespace Group_Project_Prototype.Search
         /// </summary>
         /// <param name="sender">sender</param>
         /// <param name="e">event</param>
-        private void cboNumber_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void cboCharge_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
             {
+                if (cboCharge.SelectedItem == null)
+                {
+                    logic.costSelected = false;
+                }
+                else
+                {
+                    clsGetInvoiceCost.Invoice selectedInvoice = (clsGetInvoiceCost.Invoice)cboCharge.SelectedItem;
+                    logic.cost = selectedInvoice.amount;
+                    logic.costSelected = true;
+                }
 
+                search();
             }
             catch (Exception ex)
             {
@@ -147,11 +180,22 @@ namespace Group_Project_Prototype.Search
         /// </summary>
         /// <param name="sender">sender</param>
         /// <param name="e">event</param>
-        private void cboCharge_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void cboNumber_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
             {
+                if (cboNumber.SelectedItem == null)
+                {
+                    logic.invoiceNumberSelected = false;
+                }
+                else
+                {
+                    clsGetInvoiceNumber.Invoice selectedInvoice = (clsGetInvoiceNumber.Invoice)cboNumber.SelectedItem;
+                    logic.invoiceNumber = selectedInvoice.number;
+                    logic.invoiceNumberSelected = true;
+                }
 
+                search();
             }
             catch (Exception ex)
             {
@@ -171,7 +215,17 @@ namespace Group_Project_Prototype.Search
         {
             try
             {
+                if (dateStart.SelectedDate == null)
+                {
+                    logic.dateStartSelected = false;
+                }
+                else
+                {
+                    logic.dateStart = dateStart.SelectedDate.Value.ToString();
+                    logic.dateStartSelected = true;
+                }
 
+                search();
             }
             catch (Exception ex)
             {
@@ -191,13 +245,42 @@ namespace Group_Project_Prototype.Search
         {
             try
             {
+                if (dateEnd.SelectedDate == null)
+                {
+                    logic.dateEndSelected = false;
+                }
+                else
+                {
+                    logic.dateEnd = dateEnd.SelectedDate.Value.ToString();
+                    logic.dateEndSelected = true;
+                }
 
+                search();
             }
             catch (Exception ex)
             {
                 //This is the top level method so we want to handle the exception
                 HandleError(MethodInfo.GetCurrentMethod().DeclaringType.Name,
                             MethodInfo.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void search()
+        {
+            if ((logic.dateStartSelected == true && logic.dateEndSelected == false) || (logic.dateStartSelected == false && logic.dateEndSelected == true))
+            {
+                lblStart.FontWeight = FontWeights.Bold;
+                lblStart.Foreground = Brushes.Red;
+                lblEnd.FontWeight = FontWeights.Bold;
+                lblEnd.Foreground = Brushes.Red;
+            }
+            else
+            {
+                lblStart.FontWeight = FontWeights.Normal;
+                lblStart.Foreground = Brushes.Black;
+                lblEnd.FontWeight = FontWeights.Normal;
+                lblEnd.Foreground = Brushes.Black;
+                loadInvoices();
             }
         }
 

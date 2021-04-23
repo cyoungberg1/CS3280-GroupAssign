@@ -4,15 +4,15 @@
 winexe
 C#
 .cs
-C:\Users\ddriv\Source\Repos\cyoungberg1\CS3280-GroupAssign\Group Project Prototype\obj\Release\
+C:\Users\ddriv\Source\Repos\cyoungberg1\CS3280-GroupAssign\Group Project Prototype\obj\Debug\
 Group_Project_Prototype
 none
 false
-TRACE
+DEBUG;TRACE
 C:\Users\ddriv\Source\Repos\cyoungberg1\CS3280-GroupAssign\Group Project Prototype\App.xaml
 4-1746492010
 
-17-1051256186
+18-1893615553
 13-1505183044
 Items\wndItems.xaml;Main\MainWindow.xaml;Search\wndSearch.xaml;WhistlerBlue.xaml;
 

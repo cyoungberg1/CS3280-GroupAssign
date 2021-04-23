@@ -38,6 +38,9 @@ namespace Group_Project_Prototype.Main
         /// </summary>
         int workingInvoiceSelectedItem;
 
+        public static bool invoiceSelected { get; set; }
+        public static int selectedInvoiceNum { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -59,6 +62,10 @@ namespace Group_Project_Prototype.Main
 
                 search.ShowDialog();
 
+                if (invoiceSelected)
+                {
+                    logic.selectedInvoice = selectedInvoiceNum;
+                }
                 // will be set by search window. just for testing right now
                 logic.selectedInvoice = 5053;
 

@@ -25,6 +25,9 @@ namespace Group_Project_Prototype.Search
     /// </summary>
     public partial class wndSearch : Window
     {
+        /// <summary>
+        /// objects for classes
+        /// </summary>
         clsSearchLogic logic = new clsSearchLogic();
         clsGetInvoiceNumber number = new clsGetInvoiceNumber();
         clsGetInvoiceCost cost = new clsGetInvoiceCost();
@@ -34,25 +37,57 @@ namespace Group_Project_Prototype.Search
         /// </summary>
         public wndSearch()
         {
-            InitializeComponent();
-            loadInvoices();
-            number.getInvoiceNumber();
-            cost.getInvoiceCost();
-            foreach (clsGetInvoiceNumber.Invoice item in number.numberList)
+            try
             {
-                cboNumber.Items.Add(item);
+                InitializeComponent();
+
+                //call loadInvoices() to fill the grid
+                loadInvoices();
+
+                //call getInvoiceNumber from the getInvoiceNumber class
+                number.getInvoiceNumber();
+
+                //call getInvoiceCost from the getInvoiceCost class
+                cost.getInvoiceCost();
+
+                //fill the comboboxes
+                foreach (clsGetInvoiceNumber.Invoice item in number.numberList)
+                {
+                    cboNumber.Items.Add(item);
+                }
+                foreach (clsGetInvoiceCost.Invoice item in cost.costList)
+                {
+                    cboCharge.Items.Add(item);
+                }
             }
-            foreach (clsGetInvoiceCost.Invoice item in cost.costList)
+            catch (Exception ex)
             {
-                cboCharge.Items.Add(item);
+                //Just throw the exception
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
             }
+            
         }
 
+        /// <summary>
+        /// method to call the getInvoiceData() method from the logic class
+        /// and update the data grid
+        /// </summary>
         private void loadInvoices()
         {
-            logic.getInvoiceData();
-            dgrdInvoices.ItemsSource = null;
-            dgrdInvoices.ItemsSource = logic.invoiceList;
+            try
+            {
+                logic.getInvoiceData();
+                dgrdInvoices.ItemsSource = null;
+                dgrdInvoices.ItemsSource = logic.invoiceList;
+            }
+            catch (Exception ex)
+            {
+                //Just throw the exception
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
+            
         }
 
         /// <summary>
@@ -66,9 +101,20 @@ namespace Group_Project_Prototype.Search
         {
             try
             {
-                //close this window
+                //set the invoiceSelected bool to true in the main window
+                Main.MainWindow.invoiceSelected = true;
+
+                //create an Invoice object out of the selected row in the dataGrid
                 clsSearchLogic.Invoice selectedInvoice = (clsSearchLogic.Invoice)dgrdInvoices.SelectedItem;
-                //wndMain.asdf = selectedInvoice.number;
+
+                //convert the invoice number property into an integer
+                int invoiceNum;
+                Int32.TryParse(selectedInvoice.number, out invoiceNum);
+
+                //set the selectedInvoiceNum in Main Window to the number property of the selected row
+                Main.MainWindow.selectedInvoiceNum = invoiceNum;
+
+                //close this window
                 this.Close();
             }
             catch (Exception ex)
@@ -89,6 +135,8 @@ namespace Group_Project_Prototype.Search
         {
             try
             {
+                Main.MainWindow.invoiceSelected = false;
+
                 //close this window
                 this.Close();
             }
@@ -104,6 +152,8 @@ namespace Group_Project_Prototype.Search
         {
             try
             {
+                Main.MainWindow.invoiceSelected = false;
+
                 //close this window
                 this.Close();
                 //handle the cancel ourselves
@@ -267,21 +317,31 @@ namespace Group_Project_Prototype.Search
 
         private void search()
         {
-            if ((logic.dateStartSelected == true && logic.dateEndSelected == false) || (logic.dateStartSelected == false && logic.dateEndSelected == true))
+            try
             {
-                lblStart.FontWeight = FontWeights.Bold;
-                lblStart.Foreground = Brushes.Red;
-                lblEnd.FontWeight = FontWeights.Bold;
-                lblEnd.Foreground = Brushes.Red;
+                if ((logic.dateStartSelected == true && logic.dateEndSelected == false) || (logic.dateStartSelected == false && logic.dateEndSelected == true))
+                {
+                    lblStart.FontWeight = FontWeights.Bold;
+                    lblStart.Foreground = Brushes.Red;
+                    lblEnd.FontWeight = FontWeights.Bold;
+                    lblEnd.Foreground = Brushes.Red;
+                }
+                else
+                {
+                    lblStart.FontWeight = FontWeights.Normal;
+                    lblStart.Foreground = Brushes.Black;
+                    lblEnd.FontWeight = FontWeights.Normal;
+                    lblEnd.Foreground = Brushes.Black;
+                    loadInvoices();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                lblStart.FontWeight = FontWeights.Normal;
-                lblStart.Foreground = Brushes.Black;
-                lblEnd.FontWeight = FontWeights.Normal;
-                lblEnd.Foreground = Brushes.Black;
-                loadInvoices();
+                //Just throw the exception
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
             }
+            
         }
 
         /// <summary>

@@ -48,7 +48,7 @@
             </Grid>
         </GroupBox>
         <GroupBox Grid.Row="1" Header="Invoices">
-            <DataGrid x:Name="dgrdInvoices" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,5"/>
+            <DataGrid x:Name="dgrdInvoices" Grid.Row="1" Margin="5,5,5,5" AutoGenerateColumns="True" ColumnWidth="*" FrozenColumnCount="2"/>
         </GroupBox>
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>

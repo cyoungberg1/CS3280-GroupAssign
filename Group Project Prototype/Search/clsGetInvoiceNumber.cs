@@ -29,9 +29,11 @@ namespace Group_Project_Prototype.Search
             /// invoice attributes
             /// </summary>
             public string number { get; set; }
-            public string date { get; set; }
-            public string amount { get; set; }
 
+            /// <summary>
+            /// override the ToString() method to return the invoice number
+            /// </summary>
+            /// <returns>a string of the invoice number</returns>
             public override string ToString()
             {
                 try
@@ -48,6 +50,9 @@ namespace Group_Project_Prototype.Search
             }
         }
 
+        /// <summary>
+        /// method to connect to dataset, use query and add invoices to the invoice list
+        /// </summary>
         public void getInvoiceNumber()
         {
             try
@@ -71,8 +76,6 @@ namespace Group_Project_Prototype.Search
                     {
                         invoice = new Invoice();
                         invoice.number = ds.Tables[0].Rows[i][0].ToString();
-                        invoice.date = ds.Tables[0].Rows[i][1].ToString();
-                        invoice.amount = ds.Tables[0].Rows[i][2].ToString();
 
                         numberList.Add(invoice);
                     }

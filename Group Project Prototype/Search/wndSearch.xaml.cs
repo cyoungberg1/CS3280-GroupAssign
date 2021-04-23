@@ -101,21 +101,24 @@ namespace Group_Project_Prototype.Search
         {
             try
             {
-                //set the invoiceSelected bool to true in the main window
-                Main.MainWindow.invoiceSelected = true;
+                if(dgrdInvoices.SelectedItem != null)
+                {
+                    //set the invoiceSelected bool to true in the main window
+                    Main.MainWindow.invoiceSelected = true;
 
-                //create an Invoice object out of the selected row in the dataGrid
-                clsSearchLogic.Invoice selectedInvoice = (clsSearchLogic.Invoice)dgrdInvoices.SelectedItem;
+                    //create an Invoice object out of the selected row in the dataGrid
+                    clsSearchLogic.Invoice selectedInvoice = (clsSearchLogic.Invoice)dgrdInvoices.SelectedItem;
 
-                //convert the invoice number property into an integer
-                int invoiceNum;
-                Int32.TryParse(selectedInvoice.number, out invoiceNum);
+                    //convert the invoice number property into an integer
+                    int invoiceNum;
+                    Int32.TryParse(selectedInvoice.number, out invoiceNum);
 
-                //set the selectedInvoiceNum in Main Window to the number property of the selected row
-                Main.MainWindow.selectedInvoiceNum = invoiceNum;
+                    //set the selectedInvoiceNum in Main Window to the number property of the selected row
+                    Main.MainWindow.selectedInvoiceNum = invoiceNum;
 
-                //close this window
-                this.Close();
+                    //close this window
+                    this.Close();
+                }
             }
             catch (Exception ex)
             {
@@ -135,6 +138,7 @@ namespace Group_Project_Prototype.Search
         {
             try
             {
+                //update invoiceSelected bool in main window to false
                 Main.MainWindow.invoiceSelected = false;
 
                 //close this window
@@ -148,10 +152,16 @@ namespace Group_Project_Prototype.Search
             }
         }
 
+        /// <summary>
+        /// method to handle when the window is closed with the x button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             try
             {
+                //update invoiceSelected bool in main window to false
                 Main.MainWindow.invoiceSelected = false;
 
                 //close this window
@@ -177,12 +187,14 @@ namespace Group_Project_Prototype.Search
         {
             try
             {
+                //set all the filter values to null and reset the combobox text
                 dateStart.SelectedDate = null;
                 dateEnd.SelectedDate = null;
                 cboCharge.SelectedItem = null;
                 cboCharge.Text = "Select Total Charge Amount";
                 cboNumber.SelectedItem = null;
                 cboNumber.Text = "Select Invoice Number";
+                //call getInvoiceData to update the datagrid
                 logic.getInvoiceData();
             }
             catch (Exception ex)
@@ -203,12 +215,16 @@ namespace Group_Project_Prototype.Search
         {
             try
             {
+                //check to see if nothing is selected in the charge combobox
                 if (cboCharge.SelectedItem == null)
                 {
+                    //if that is the case, set the costSelected bool to false in the logic class
                     logic.costSelected = false;
                 }
                 else
                 {
+                    //if there is something selected, create an invoice object 
+                    //and update the variables in the logic class to show it is selected and what it is
                     clsGetInvoiceCost.Invoice selectedInvoice = (clsGetInvoiceCost.Invoice)cboCharge.SelectedItem;
                     logic.cost = selectedInvoice.amount;
                     logic.costSelected = true;
@@ -315,6 +331,9 @@ namespace Group_Project_Prototype.Search
             }
         }
 
+        /// <summary>
+        /// method to check to make sure there is a start and end date before calling loadInvoices()
+        /// </summary>
         private void search()
         {
             try

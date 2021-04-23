@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,7 +14,16 @@ namespace Group_Project_Prototype.Search
         /// </summary>
         public static string search()
         {
-            return "SELECT * FROM Invoices";
+            try
+            {
+                return "SELECT * FROM Invoices";
+            }
+            catch (Exception ex)
+            {
+                //Just throw the exception
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -21,7 +31,16 @@ namespace Group_Project_Prototype.Search
         /// </summary>
         public static string searchDistinct()
         {
-            return "SELECT DISTINCT TotalCost FROM Invoices ORDER BY TotalCost";
+            try
+            {
+                return "SELECT DISTINCT TotalCost FROM Invoices ORDER BY TotalCost";
+            }
+            catch (Exception ex)
+            {
+                //Just throw the exception
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -31,7 +50,16 @@ namespace Group_Project_Prototype.Search
         /// <param name="dateEnd">date variable for end date</param>
         public static string searchDate(string dateStart, string dateEnd)
         {
-            return "SELECT * FROM Invoices WHERE InvoiceDate BETWEEN #" + dateStart + "# AND #" + dateEnd + "#";
+            try
+            {
+                return "SELECT * FROM Invoices WHERE InvoiceDate BETWEEN #" + dateStart + "# AND #" + dateEnd + "#";
+            }
+            catch (Exception ex)
+            {
+                //Just throw the exception
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -40,7 +68,16 @@ namespace Group_Project_Prototype.Search
         /// <param name="invoiceNumber">int variable for invoice number</param>
         public static string searchNum(string invoiceNumber)
         {
-            return "SELECT * FROM Invoices WHERE InvoiceNum = " + invoiceNumber;
+            try
+            {
+                return "SELECT * FROM Invoices WHERE InvoiceNum = " + invoiceNumber;
+            }
+            catch (Exception ex)
+            {
+                //Just throw the exception
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -49,7 +86,16 @@ namespace Group_Project_Prototype.Search
         /// <param name="cost">int variable for total invoice cost</param>
         public static string searchCost(string cost)
         {
-            return "SELECT * FROM Invoices WHERE TotalCost = " + cost;
+            try
+            {
+                return "SELECT * FROM Invoices WHERE TotalCost = " + cost;
+            }
+            catch (Exception ex)
+            {
+                //Just throw the exception
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -60,7 +106,16 @@ namespace Group_Project_Prototype.Search
         /// <param name="invoiceNumber">int variable for invoice number</param>
         public static string searchDateNum(string dateStart, string dateEnd, string invoiceNumber)
         {
-            return "SELECT * FROM Invoices WHERE InvoiceNum = " + invoiceNumber + " AND InvoiceDate BETWEEN #" + dateStart + "# AND #" + dateEnd + "#";
+            try
+            {
+                return "SELECT * FROM Invoices WHERE InvoiceNum = " + invoiceNumber + " AND InvoiceDate BETWEEN #" + dateStart + "# AND #" + dateEnd + "#";
+            }
+            catch (Exception ex)
+            {
+                //Just throw the exception
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }           
         }
 
         /// <summary>
@@ -71,7 +126,16 @@ namespace Group_Project_Prototype.Search
         /// <param name="cost">int variable for total cost</param>
         public static string searchDateCost(string dateStart, string dateEnd, string cost)
         {
-            return "SELECT * FROM Invoices WHERE TotalCost = " + cost + " AND InvoiceDate BETWEEN #" + dateStart + "# AND #" + dateEnd + "#";
+            try
+            {
+                return "SELECT * FROM Invoices WHERE TotalCost = " + cost + " AND InvoiceDate BETWEEN #" + dateStart + "# AND #" + dateEnd + "#";
+            }
+            catch (Exception ex)
+            {
+                //Just throw the exception
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -81,7 +145,16 @@ namespace Group_Project_Prototype.Search
         /// <param name="invoiceNumber">int variable for invoice number</param>
         public static string searchCostNum(string cost, string invoiceNumber)
         {
-            return "SELECT * FROM Invoices WHERE InvoiceNum = " + invoiceNumber + " AND TotalCost = " + cost;
+            try
+            {
+                return "SELECT * FROM Invoices WHERE InvoiceNum = " + invoiceNumber + " AND TotalCost = " + cost;
+            }
+            catch (Exception ex)
+            {
+                //Just throw the exception
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }            
         }
 
         /// <summary>
@@ -93,7 +166,16 @@ namespace Group_Project_Prototype.Search
         /// <param name="invoiceNumber">int variable for invoice number</param>
         public static string searchAll(string dateStart, string dateEnd, string cost, string invoiceNumber)
         {
-            return "SELECT * FROM Invoices WHERE InvoiceNum = " + invoiceNumber + " AND InvoiceDate BETWEEN #" + dateStart + "# AND #" + dateEnd + "# AND TotalCost = " + cost;
+            try
+            {
+                return "SELECT * FROM Invoices WHERE InvoiceNum = " + invoiceNumber + " AND InvoiceDate BETWEEN #" + dateStart + "# AND #" + dateEnd + "# AND TotalCost = " + cost;
+            }
+            catch (Exception ex)
+            {
+                //Just throw the exception
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }            
         }
     }
 }

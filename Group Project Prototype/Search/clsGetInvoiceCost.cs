@@ -30,6 +30,10 @@ namespace Group_Project_Prototype.Search
             /// </summary>
             public string amount { get; set; }
 
+            /// <summary>
+            /// override the ToString() method to return the total cost amount
+            /// </summary>
+            /// <returns>a string of the total cost amount</returns>
             public override string ToString()
             {
                 try
@@ -46,6 +50,9 @@ namespace Group_Project_Prototype.Search
             }
         }
 
+        /// <summary>
+        /// method to connect to dataset, use query and add invoices to the invoice list
+        /// </summary>
         public void getInvoiceCost()
         {
             try

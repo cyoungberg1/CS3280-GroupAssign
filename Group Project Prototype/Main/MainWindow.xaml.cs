@@ -62,12 +62,13 @@ namespace Group_Project_Prototype.Main
 
                 search.ShowDialog();
 
+                // will be set by search window. just for testing right now
                 if (invoiceSelected)
                 {
                     logic.selectedInvoice = selectedInvoiceNum;
                 }
-                // will be set by search window. just for testing right now
-                logic.selectedInvoice = 5053;
+                
+                logic.selectedInvoice = selectedInvoiceNum;
 
                 addInvoiceCanvas.Visibility = Visibility.Hidden;
 

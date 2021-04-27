@@ -31,11 +31,12 @@ namespace Group_Project_Prototype.Search
         clsSearchLogic logic = new clsSearchLogic();
         clsGetInvoiceNumber number = new clsGetInvoiceNumber();
         clsGetInvoiceCost cost = new clsGetInvoiceCost();
+        Main.clsMainLogic mLogic;
 
         /// <summary>
         /// initialize the search window
         /// </summary>
-        public wndSearch()
+        public wndSearch(Main.clsMainLogic logic)
         {
             try
             {
@@ -59,6 +60,8 @@ namespace Group_Project_Prototype.Search
                 {
                     cboCharge.Items.Add(item);
                 }
+
+                mLogic = logic;
             }
             catch (Exception ex)
             {
@@ -66,7 +69,7 @@ namespace Group_Project_Prototype.Search
                 throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
                                     MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
             }
-            
+
         }
 
         /// <summary>
@@ -87,7 +90,7 @@ namespace Group_Project_Prototype.Search
                 throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
                                     MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
             }
-            
+
         }
 
         /// <summary>
@@ -101,11 +104,8 @@ namespace Group_Project_Prototype.Search
         {
             try
             {
-                if(dgrdInvoices.SelectedItem != null)
+                if (dgrdInvoices.SelectedItem != null)
                 {
-                    //set the invoiceSelected bool to true in the main window
-                    Main.MainWindow.invoiceSelected = true;
-
                     //create an Invoice object out of the selected row in the dataGrid
                     clsSearchLogic.Invoice selectedInvoice = (clsSearchLogic.Invoice)dgrdInvoices.SelectedItem;
 
@@ -114,7 +114,7 @@ namespace Group_Project_Prototype.Search
                     Int32.TryParse(selectedInvoice.number, out invoiceNum);
 
                     //set the selectedInvoiceNum in Main Window to the number property of the selected row
-                    Main.MainWindow.selectedInvoiceNum = invoiceNum;
+                    mLogic.selectedInvoice = invoiceNum;
 
                     //close this window
                     this.Close();
@@ -138,9 +138,6 @@ namespace Group_Project_Prototype.Search
         {
             try
             {
-                //update invoiceSelected bool in main window to false
-                Main.MainWindow.invoiceSelected = false;
-
                 //close this window
                 this.Close();
             }
@@ -161,9 +158,6 @@ namespace Group_Project_Prototype.Search
         {
             try
             {
-                //update invoiceSelected bool in main window to false
-                Main.MainWindow.invoiceSelected = false;
-
                 //close this window
                 this.Close();
                 //handle the cancel ourselves
@@ -360,7 +354,7 @@ namespace Group_Project_Prototype.Search
                 throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
                                     MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
             }
-            
+
         }
 
         /// <summary>

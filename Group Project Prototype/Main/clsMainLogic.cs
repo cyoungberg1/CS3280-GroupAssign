@@ -7,13 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 using System.ComponentModel;
+using System.Reflection;
 
 namespace Group_Project_Prototype.Main
 {
     /// <summary>
     /// Class for the main window's primary logic.
     /// </summary>
-    class clsMainLogic
+    public class clsMainLogic
     {
         /// <summary>
         /// An object of the clsMainSQL class
@@ -45,6 +46,9 @@ namespace Group_Project_Prototype.Main
         /// </summary>
         ObservableCollection<Items.clsItem> itemsList;
 
+        /// <summary>
+        ///  list of items for the selected invoice datagrid
+        /// </summary>
         ObservableCollection<Items.clsItem> dgItems;
 
         /// <summary>
@@ -53,20 +57,31 @@ namespace Group_Project_Prototype.Main
         /// <returns>A list of item objects.</returns>
         public ObservableCollection<Items.clsItem> GetItems()
         {
-            int retVal = 0;
-            string itemsSQL = sql.SelectItems();
-            ds = data.ExecuteSQLStatement(itemsSQL, ref retVal);
-
-            itemsList = new ObservableCollection<Items.clsItem>();
-            Items.clsItem item;
-
-            for (int i = 0; i < retVal; i++)
+            try
             {
-                item = new Items.clsItem(ds.Tables[0].Rows[i][0].ToString(), ds.Tables[0].Rows[i][2].ToString(), ds.Tables[0].Rows[i][1].ToString());
-                itemsList.Add(item);
+                int retVal = 0;
+                string itemsSQL = sql.SelectItems();
+                ds = data.ExecuteSQLStatement(itemsSQL, ref retVal);
+
+                itemsList = new ObservableCollection<Items.clsItem>();
+                Items.clsItem item;
+
+                // fills itemsList with queried items
+                for (int i = 0; i < retVal; i++)
+                {
+                    item = new Items.clsItem(ds.Tables[0].Rows[i][0].ToString(), ds.Tables[0].Rows[i][2].ToString(), ds.Tables[0].Rows[i][1].ToString());
+                    itemsList.Add(item);
+                }
+
+                return itemsList;
+            }
+            catch (Exception ex)
+            {
+                //Just throw the exception
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
             }
 
-            return itemsList;
         }
 
         /// <summary>
@@ -75,7 +90,16 @@ namespace Group_Project_Prototype.Main
         /// <param name="item"></param>
         public void AddItem(Items.clsItem item)
         {
-            WorkingInvoiceItems.Add(item);
+            try
+            {
+                WorkingInvoiceItems.Add(item);
+            }
+            catch (Exception ex)
+            {
+                //Just throw the exception
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -84,7 +108,16 @@ namespace Group_Project_Prototype.Main
         /// <returns></returns>
         public ObservableCollection<Items.clsItem> GetInvoiceList()
         {
-            return WorkingInvoiceItems;
+            try
+            {
+                return WorkingInvoiceItems;
+            }
+            catch (Exception ex)
+            {
+                //Just throw the exception
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -93,22 +126,47 @@ namespace Group_Project_Prototype.Main
         /// <returns>Total cost of the invoice.</returns>
         public string GetInvoiceCost()
         {
-            int cost = 0;
-            for (int i = 0; i < WorkingInvoiceItems.Count; i++)
+            try
             {
-                cost += Int32.Parse(WorkingInvoiceItems[i].Cost);
+                int cost = 0;
+                // adds up all the costs of the items
+                for (int i = 0; i < WorkingInvoiceItems.Count; i++)
+                {
+                    cost += Int32.Parse(WorkingInvoiceItems[i].Cost);
+                }
+                return cost.ToString();
             }
-            return cost.ToString();
+            catch (Exception ex)
+            {
+                //Just throw the exception
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
+
         }
 
+        /// <summary>
+        /// Gets the cost of the selected invoice.
+        /// </summary>
+        /// <returns></returns>
         public int GetSelectedInvoiceCost()
         {
-            int cost = 0;
-            for (int i = 0; i < dgItems.Count; i++)
+            try
             {
-                cost += Int32.Parse(dgItems[i].Cost);
+                int cost = 0;
+                for (int i = 0; i < dgItems.Count; i++)
+                {
+                    cost += Int32.Parse(dgItems[i].Cost);
+                }
+                return cost;
             }
-            return cost;
+            catch (Exception ex)
+            {
+                //Just throw the exception
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
+
         }
 
         /// <summary>
@@ -116,7 +174,16 @@ namespace Group_Project_Prototype.Main
         /// </summary>
         public void clearInvoice()
         {
-            WorkingInvoiceItems.Clear();
+            try
+            {
+                WorkingInvoiceItems.Clear();
+            }
+            catch (Exception ex)
+            {
+                //Just throw the exception
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -126,27 +193,34 @@ namespace Group_Project_Prototype.Main
         /// <param name="totalCost"></param>
         public void SaveInvoice(string invoiceDate, string totalCost)
         {
-            string insertInvoiceSQL = sql.InsertInvoice(invoiceDate, totalCost);
-
-            data.ExecuteNonQuery(insertInvoiceSQL);
-
-            string invoiceNumber = data.ExecuteScalarSQL("SELECT MAX(InvoiceNum) FROM Invoices");
-            selectedInvoice = Int32.Parse(invoiceNumber);
-
-            string insertLineItemSQL;
-
-            dgItems = new ObservableCollection<Items.clsItem>();
-
-            // insert a line item for each item on the invoice
-            for (int i = 0; i < WorkingInvoiceItems.Count; i++)
+            try
             {
-                dgItems.Add(WorkingInvoiceItems[i]);
+                string insertInvoiceSQL = sql.InsertInvoice(invoiceDate, totalCost);
 
-                insertLineItemSQL = sql.InsertLineItem(Int32.Parse(invoiceNumber), (i+1), WorkingInvoiceItems[i].Code);
-                data.ExecuteNonQuery(insertLineItemSQL);
+                data.ExecuteNonQuery(insertInvoiceSQL);
+
+                string invoiceNumber = data.ExecuteScalarSQL("SELECT MAX(InvoiceNum) FROM Invoices");
+                selectedInvoice = Int32.Parse(invoiceNumber);
+
+                string insertLineItemSQL;
+
+                dgItems = new ObservableCollection<Items.clsItem>();
+
+                // insert a line item for each item on the invoice
+                for (int i = 0; i < WorkingInvoiceItems.Count; i++)
+                {
+                    dgItems.Add(WorkingInvoiceItems[i]);
+
+                    insertLineItemSQL = sql.InsertLineItem(Int32.Parse(invoiceNumber), (i + 1), WorkingInvoiceItems[i].Code);
+                    data.ExecuteNonQuery(insertLineItemSQL);
+                }
             }
-
-            
+            catch (Exception ex)
+            {
+                //Just throw the exception
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -155,21 +229,32 @@ namespace Group_Project_Prototype.Main
         /// <returns>An obvservable collection of invoices.</returns>
         public ObservableCollection<Items.clsItem> DisplayInvoie()
         {
-            string getInvoiceSQL = sql.SelectLineItem(selectedInvoice);
-
-            int retVal = 0;
-            ds = data.ExecuteSQLStatement(getInvoiceSQL, ref retVal);
-
-            dgItems = new ObservableCollection<Items.clsItem>();
-            Items.clsItem item;
-
-            for (int i = 0; i < retVal; i++)
+            try
             {
-                item = new Items.clsItem(ds.Tables[0].Rows[i][0].ToString(), ds.Tables[0].Rows[i][2].ToString(), ds.Tables[0].Rows[i][1].ToString());
-                dgItems.Add(item);
+                string getInvoiceSQL = sql.SelectLineItem(selectedInvoice);
+
+                int retVal = 0;
+                ds = data.ExecuteSQLStatement(getInvoiceSQL, ref retVal);
+
+                dgItems = new ObservableCollection<Items.clsItem>();
+                Items.clsItem item;
+
+                // fills dgItems with each queried item
+                for (int i = 0; i < retVal; i++)
+                {
+                    item = new Items.clsItem(ds.Tables[0].Rows[i][0].ToString(), ds.Tables[0].Rows[i][2].ToString(), ds.Tables[0].Rows[i][1].ToString());
+                    dgItems.Add(item);
+                }
+
+                return dgItems;
+            }
+            catch (Exception ex)
+            {
+                //Just throw the exception
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
             }
 
-            return dgItems;
         }
 
         /// <summary>
@@ -179,7 +264,17 @@ namespace Group_Project_Prototype.Main
         /// <param name="index"></param>
         public void UpdateDataGridItem(Items.clsItem item, int index)
         {
-            dgItems[index] = item;
+            try
+            {
+                // changes the item at an index to the passed in item.
+                dgItems[index] = item;
+            }
+            catch (Exception ex)
+            {
+                //Just throw the exception
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -190,11 +285,21 @@ namespace Group_Project_Prototype.Main
         /// <param name="itemCode">The item code.</param>
         public void UpdateInvoice(int invoiceNum, int lineItemNum, string itemCode)
         {
-            string updateLineItemSQL = sql.UpdateLineItem(invoiceNum, lineItemNum, itemCode);
-            data.ExecuteNonQuery(updateLineItemSQL);
+            try
+            {
+                string updateLineItemSQL = sql.UpdateLineItem(invoiceNum, lineItemNum, itemCode);
+                data.ExecuteNonQuery(updateLineItemSQL);
 
-            string updateInvoiceSQL = sql.UpdateInvoice(GetSelectedInvoiceCost(), invoiceNum);
-            data.ExecuteNonQuery(updateInvoiceSQL);
+                string updateInvoiceSQL = sql.UpdateInvoice(GetSelectedInvoiceCost(), invoiceNum);
+                data.ExecuteNonQuery(updateInvoiceSQL);
+            }
+            catch (Exception ex)
+            {
+                //Just throw the exception
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
+
         }
 
         /// <summary>
@@ -203,13 +308,23 @@ namespace Group_Project_Prototype.Main
         /// <param name="invoiceNum">The invoice number.</param>
         public void DeleteInvoice(int invoiceNum)
         {
-            string deleteLineItemSQL = sql.DeleteLineItem(invoiceNum);
-            data.ExecuteNonQuery(deleteLineItemSQL);
+            try
+            {
+                string deleteLineItemSQL = sql.DeleteLineItem(invoiceNum);
+                data.ExecuteNonQuery(deleteLineItemSQL);
 
-            string deleteInvoiceSQL = sql.DeleteInvoice(invoiceNum);
-            data.ExecuteNonQuery(deleteInvoiceSQL);
+                string deleteInvoiceSQL = sql.DeleteInvoice(invoiceNum);
+                data.ExecuteNonQuery(deleteInvoiceSQL);
 
-            dgItems.Clear();
+                dgItems.Clear();
+            }
+            catch (Exception ex)
+            {
+                //Just throw the exception
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
+
         }
 
         /// <summary>
@@ -218,9 +333,17 @@ namespace Group_Project_Prototype.Main
         /// <param name="index"></param>
         public void DeleteWorkingInvoiceItem(int index)
         {
-            WorkingInvoiceItems.RemoveAt(index);
+            try
+            {
+                WorkingInvoiceItems.RemoveAt(index);
+            }
+            catch (Exception ex) 
+            {
+                //Just throw the exception
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
-
 
         /// <summary>
         /// Getter and setter for the selectedInvoice field.
@@ -228,30 +351,7 @@ namespace Group_Project_Prototype.Main
         public int selectedInvoice
         {
             get { return iSelectedInvoice; }
-            set { 
-                iSelectedInvoice = value; 
-            }
+            set { iSelectedInvoice = value; }
         }
-
     }
-
-    /// <summary>
-    /// Class to hold invoice attributes.
-    /// </summary>
-    //class Invoice
-    //{
-    //    /// <summary>
-    //    /// The item code for an item on the invoice.
-    //    /// </summary>
-    //    private char cItemCode;
-    //    /// <summary>
-    //    /// The item description for an item on the description 
-    //    /// </summary>
-    //    private string sItemDesc;
-    //    private double dCost;
-
-    //    public char ItemCode { get; set; }
-    //    public string ItemDesc { get; set; }
-    //    public double Cost { get; set; }
-    //}
 }

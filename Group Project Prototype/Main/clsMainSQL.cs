@@ -22,8 +22,16 @@ namespace Group_Project_Prototype.Main
         /// <returns>SQL string</returns>
         public string UpdateInvoice(int cost, int invoiceNum)
         {
-            string sql = "UPDATE Invoices SET TotalCost = " + cost + " WHERE InvoiceNum = " + invoiceNum;
-            return sql;
+            try
+            {
+                return "UPDATE Invoices SET TotalCost = " + cost + " WHERE InvoiceNum = " + invoiceNum;
+            }
+            catch (Exception ex)
+            {
+                //Just throw the exception
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
         /// <summary>
         /// SQL used to update line items for an invoice.
@@ -34,8 +42,16 @@ namespace Group_Project_Prototype.Main
         /// <returns></returns>
         public string UpdateLineItem(int invoiceNum, int lineItemNum, string itemCode)
         {
-            //return "UPDATE LineItems SET LineItemNum = " + lineItemNum + ", ItemCode = '" + itemCode + "' WHERE InvoiceNum = " + invoiceNum;
-            return "UPDATE LineItems SET ItemCode = '" + itemCode + "' WHERE InvoiceNum = " + invoiceNum + " AND LineItemNum = " + lineItemNum;
+            try
+            {
+                return "UPDATE LineItems SET ItemCode = '" + itemCode + "' WHERE InvoiceNum = " + invoiceNum + " AND LineItemNum = " + lineItemNum;
+            }
+            catch (Exception ex)
+            {
+                //Just throw the exception
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
         /// <summary>
         /// SQL used to delete a LineItem entry.
@@ -46,7 +62,16 @@ namespace Group_Project_Prototype.Main
         /// <returns>SQL string</returns>
         public string DeleteLineItem(int invoiceNum)
         {
-            return "DELETE FROM LineItems WHERE InvoiceNum = " + invoiceNum;
+            try
+            {
+                return "DELETE FROM LineItems WHERE InvoiceNum = " + invoiceNum;
+            }
+            catch (Exception ex)
+            {
+                //Just throw the exception
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
         /// <summary>
         /// SQL used to delete an invoice.
@@ -55,7 +80,16 @@ namespace Group_Project_Prototype.Main
         /// <returns>SQL string</returns>
         public string DeleteInvoice(int invoiceNum)
         {
-            return "DELETE FROM Invoices WHERE InvoiceNum = " + invoiceNum;
+            try
+            {
+                return "DELETE FROM Invoices WHERE InvoiceNum = " + invoiceNum;
+            }
+            catch (Exception ex)
+            {
+                //Just throw the exception
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
         /// <summary>
         /// SQL used to insert a line item.
@@ -66,8 +100,16 @@ namespace Group_Project_Prototype.Main
         /// <returns>SQL string</returns>
         public string InsertLineItem(int invoiceNum, int lineItemNum, string itemCode)
         {
-            string sql = "INSERT INTO LineItems (InvoiceNum, LineItemNum, ItemCode) VALUES (" + invoiceNum + "," + lineItemNum + ", " + "'" + itemCode + "')";
-            return sql;
+            try
+            {
+                return "INSERT INTO LineItems (InvoiceNum, LineItemNum, ItemCode) VALUES (" + invoiceNum + "," + lineItemNum + ", " + "'" + itemCode + "')";
+            }
+            catch (Exception ex)
+            {
+                //Just throw the exception
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
         /// <summary>
         /// SQL used to insert a new invoice.
@@ -77,8 +119,16 @@ namespace Group_Project_Prototype.Main
         /// <returns>SQL string</returns>
         public string InsertInvoice(string date, string cost)
         {
-            string sql = "INSERT into Invoices (InvoiceDate, TotalCost) VALUES (#" + date + "#, " + cost + ")";
-            return sql;
+            try
+            {
+                return "INSERT into Invoices (InvoiceDate, TotalCost) VALUES (#" + date + "#, " + cost + ")";
+            }
+            catch (Exception ex)
+            {
+                //Just throw the exception
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
         /// <summary>
         /// SQL used to select an invoice by its number.
@@ -87,8 +137,17 @@ namespace Group_Project_Prototype.Main
         /// <returns>SQL string</returns>
         public string SelectInvoiceByNumber(int invoiceNum)
         {
-            string sql = "SELECT InvoiceNum, InvoiceDate, TotalCost FROM Invoices WHERE InvoiceNum =" + invoiceNum;
-            return sql;
+            try
+            {
+                return "SELECT InvoiceNum, InvoiceDate, TotalCost FROM Invoices WHERE InvoiceNum =" + invoiceNum;
+
+            }
+            catch (Exception ex)
+            {
+                //Just throw the exception
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
         /// <summary>
         /// SQL to select all items.
@@ -96,8 +155,16 @@ namespace Group_Project_Prototype.Main
         /// <returns>SQL string</returns>
         public string SelectItems()
         {
-            string sql = "SELECT ItemCode, ItemDesc, Cost FROM ItemDesc";
-            return sql;
+            try
+            {
+                return "SELECT ItemCode, ItemDesc, Cost FROM ItemDesc";
+            }
+            catch (Exception ex)
+            {
+                //Just throw the exception
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
         /// <summary>
         /// SQL used to select a Line Item based on an invoice number.
@@ -106,8 +173,16 @@ namespace Group_Project_Prototype.Main
         /// <returns>SQL string</returns>
         public string SelectLineItem(int invoiceNum)
         {
-            string sql = "SELECT LineItems.ItemCode, ItemDesc.ItemDesc, ItemDesc.Cost FROM LineItems, ItemDesc Where LineItems.ItemCode = ItemDesc.ItemCode And LineItems.InvoiceNum =" + invoiceNum;
-            return sql;
+            try
+            {
+                return "SELECT LineItems.ItemCode, ItemDesc.ItemDesc, ItemDesc.Cost FROM LineItems, ItemDesc Where LineItems.ItemCode = ItemDesc.ItemCode And LineItems.InvoiceNum =" + invoiceNum;
+            }
+            catch (Exception ex)
+            {
+                //Just throw the exception
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
 
     }

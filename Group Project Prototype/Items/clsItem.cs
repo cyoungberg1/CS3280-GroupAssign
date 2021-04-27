@@ -38,7 +38,7 @@ namespace Group_Project_Prototype.Items
         /// <summary>
         /// default constructor 
         /// </summary>
-        public clsItem(){}
+        public clsItem() { }
         #endregion
         #region Getters and Setters
         /// <summary>
@@ -73,7 +73,7 @@ namespace Group_Project_Prototype.Items
         /// <returns></returns>
         public override string ToString()
         {
-            return sCode + " | "  + sDesc + ", $" + sCost;
+            return sCode + " | " + sDesc + ", $" + sCost;
         }
         #endregion
     }

@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Data;
 using System.ComponentModel;
+using System.Reflection;
 
 namespace Group_Project_Prototype.Main
 {
@@ -26,7 +27,12 @@ namespace Group_Project_Prototype.Main
         /// <summary>
         /// An object of the clsMainLogic class
         /// </summary>
-        clsMainLogic logic = new clsMainLogic();
+        public clsMainLogic logic = new clsMainLogic();
+
+        /// <summary>
+        /// A list of items.
+        /// </summary>
+        ObservableCollection<Items.clsItem> itemsList;
 
         /// <summary>
         /// The item currently selected in the selected invoice datagrid
@@ -38,13 +44,22 @@ namespace Group_Project_Prototype.Main
         /// </summary>
         int workingInvoiceSelectedItem;
 
-        public static bool invoiceSelected { get; set; }
-        public static int selectedInvoiceNum { get; set; }
-
+        /// <summary>
+        /// Constructor for the main window.
+        /// </summary>
         public MainWindow()
         {
-            InitializeComponent();
-            addInvoiceCanvas.Visibility = Visibility.Hidden;
+            try
+            {
+                InitializeComponent();
+                addInvoiceCanvas.Visibility = Visibility.Hidden;
+            }
+            catch (Exception ex)
+            {
+                //Just throw the exception
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
 
         }
 
@@ -55,35 +70,49 @@ namespace Group_Project_Prototype.Main
         /// <param name="e"></param>
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            if ((sender as MenuItem).Name == "searchMenuItem")
+            try
             {
-                // displays the search window
-                Search.wndSearch search = new Search.wndSearch();
-
-                search.ShowDialog();
-
-                // will be set by search window. just for testing right now
-                if (invoiceSelected)
+                if ((sender as MenuItem).Name == "searchMenuItem")
                 {
-                    logic.selectedInvoice = selectedInvoiceNum;
+                    // displays the search window
+                    Search.wndSearch search = new Search.wndSearch(logic);
+
+                    search.ShowDialog();
+
+                    addInvoiceCanvas.Visibility = Visibility.Hidden;
+
+                    // displays selected invoice in the datagrid
+                    selectedInvoiceDataGrid.ItemsSource = logic.DisplayInvoie();
+
+                    // update label dislays invoice number
+                    selectedInvoiceLbl.Content = "Selected Invoice #" + logic.selectedInvoice;
+
+
                 }
-                
-                logic.selectedInvoice = selectedInvoiceNum;
+                else if ((sender as MenuItem).Name == "editMenuItem")
+                {
+                    // displays the items window
+                    Items.wndItems itms = new Items.wndItems();
 
-                addInvoiceCanvas.Visibility = Visibility.Hidden;
+                    itms.ShowDialog();
 
-                selectedInvoiceDataGrid.ItemsSource = logic.DisplayInvoie();
+                    addInvoiceCanvas.Visibility = Visibility.Hidden;
 
+                    itemsComboBox.Text = "";
+                    itemsComboBox.SelectedIndex = -1;
+                    itemsComboBox.Items.Clear();
+
+                    itemCostTxtBox.Text = "";
+                    totalCostTxtBox.Text = "";
+                }
             }
-            else if ((sender as MenuItem).Name == "editMenuItem")
+            catch (Exception ex)
             {
-                // displays the items window
-                Items.wndItems itms = new Items.wndItems();
-
-                itms.ShowDialog();
-
-                //requery the combo box in case of changes made to item list.
+                //This is the top level method so we want to handle the exception
+                HandleError(MethodInfo.GetCurrentMethod().DeclaringType.Name,
+                            MethodInfo.GetCurrentMethod().Name, ex.Message);
             }
+
         }
 
         /// <summary>
@@ -93,19 +122,37 @@ namespace Group_Project_Prototype.Main
         /// <param name="e"></param>
         private void addInvoiceBtn_Click(object sender, RoutedEventArgs e)
         {
-            addInvoiceCanvas.Visibility = Visibility.Visible;
-            invoiceAddedCanvas.Visibility = Visibility.Hidden;
-            itemEditCanvas.Visibility = Visibility.Hidden;
-
-            logic.clearInvoice();
-            workingInvoiceDataGrid.Items.Refresh();
-            workingInvoiceDataGrid.ItemsSource = logic.GetInvoiceList();
-
-            ObservableCollection<Items.clsItem> itemsList = logic.GetItems();
-            for (int i = 0; i < itemsList.Count; i++)
+            try
             {
-                itemsComboBox.Items.Add(itemsList[i]);
+                // show controls
+                addInvoiceCanvas.Visibility = Visibility.Visible;
+                invoiceAddedCanvas.Visibility = Visibility.Hidden;
+                itemEditCanvas.Visibility = Visibility.Hidden;
+
+                // reset and refresh invoice
+                logic.clearInvoice();
+                workingInvoiceDataGrid.Items.Refresh();
+                workingInvoiceDataGrid.ItemsSource = logic.GetInvoiceList();
+
+                // reset controls
+                itemCostTxtBox.Text = "";
+                totalCostTxtBox.Text = "";
+                itemsComboBox.SelectedIndex = -1;
+
+                //fill items combo box
+                itemsList = logic.GetItems();
+                for (int i = 0; i < itemsList.Count; i++)
+                {
+                    itemsComboBox.Items.Add(itemsList[i]);
+                }
             }
+            catch (Exception ex)
+            {
+                //This is the top level method so we want to handle the exception
+                HandleError(MethodInfo.GetCurrentMethod().DeclaringType.Name,
+                            MethodInfo.GetCurrentMethod().Name, ex.Message);
+            }
+
         }
 
         /// <summary>
@@ -115,10 +162,27 @@ namespace Group_Project_Prototype.Main
         /// <param name="e"></param>
         private void itemsComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Items.clsItem Item;
-            Item = (Items.clsItem)itemsComboBox.Items[itemsComboBox.SelectedIndex];
+            try
+            {
+                if (itemsComboBox.SelectedIndex < 0)
+                {
+                    return;
+                }
 
-            itemCostTxtBox.Text = "$" + Item.Cost;
+                // cast selection to an clsItem object
+                Items.clsItem Item;
+                Item = (Items.clsItem)itemsComboBox.Items[itemsComboBox.SelectedIndex];
+
+                // display cost of the item
+                itemCostTxtBox.Text = "$" + Item.Cost;
+            }
+            catch (Exception ex)
+            {
+                //This is the top level method so we want to handle the exception
+                HandleError(MethodInfo.GetCurrentMethod().DeclaringType.Name,
+                            MethodInfo.GetCurrentMethod().Name, ex.Message);
+            }
+
         }
 
         /// <summary>
@@ -128,23 +192,33 @@ namespace Group_Project_Prototype.Main
         /// <param name="e"></param>
         private void addItemBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (itemsComboBox.Text == "")
+            try
             {
-                MessageBox.Show("Please select an item.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
+                if (itemsComboBox.Text == "")
+                {
+                    MessageBox.Show("Please select an item.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                // add selected item to the invoice list
+                logic.AddItem((Items.clsItem)itemsComboBox.Items[itemsComboBox.SelectedIndex]);
+
+                // update the total cost for the invoice
+
+                totalCostTxtBox.Text = "$" + logic.GetInvoiceCost();
+                // refresh the working invoice datagrid
+                workingInvoiceDataGrid.Items.Refresh();
+
+                // populate the working invoice datagrid
+                workingInvoiceDataGrid.ItemsSource = logic.GetInvoiceList();
+            }
+            catch (Exception ex)
+            {
+                //This is the top level method so we want to handle the exception
+                HandleError(MethodInfo.GetCurrentMethod().DeclaringType.Name,
+                            MethodInfo.GetCurrentMethod().Name, ex.Message);
             }
 
-            // add selected item to the invoice list
-            logic.AddItem((Items.clsItem)itemsComboBox.Items[itemsComboBox.SelectedIndex]);
-
-            // update the total cost for the invoice
-
-            totalCostTxtBox.Text = "$" + logic.GetInvoiceCost();
-            // refresh the working invoice datagrid
-            workingInvoiceDataGrid.Items.Refresh();
-
-            // populate the working invoice datagrid
-            workingInvoiceDataGrid.ItemsSource = logic.GetInvoiceList();
         }
 
         /// <summary>
@@ -154,8 +228,18 @@ namespace Group_Project_Prototype.Main
         /// <param name="e"></param>
         private void clearInvoiceBtn_Click(object sender, RoutedEventArgs e)
         {
-            logic.clearInvoice();
-            totalCostTxtBox.Text = "$" + logic.GetInvoiceCost();
+            try
+            {
+                logic.clearInvoice();
+                totalCostTxtBox.Text = "$" + logic.GetInvoiceCost();
+            }
+            catch (Exception ex)
+            {
+                //This is the top level method so we want to handle the exception
+                HandleError(MethodInfo.GetCurrentMethod().DeclaringType.Name,
+                            MethodInfo.GetCurrentMethod().Name, ex.Message);
+            }
+
         }
 
         /// <summary>
@@ -165,23 +249,37 @@ namespace Group_Project_Prototype.Main
         /// <param name="e"></param>
         private void saveInvoiceBtn_Click(object sender, RoutedEventArgs e)
         {
-            ObservableCollection<Items.clsItem> items = logic.GetInvoiceList();
-            if (items.Count < 1)
+            try
             {
-                MessageBox.Show("Please add at least one item.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
+                ObservableCollection<Items.clsItem> items = logic.GetInvoiceList();
+                if (items.Count < 1)
+                {
+                    MessageBox.Show("Please add at least one item.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                else if (invoiceDate.Text == "")
+                {
+                    MessageBox.Show("Please select a date.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                // saves invoice to the database
+                logic.SaveInvoice(invoiceDate.Text, logic.GetInvoiceCost());
+                addInvoiceCanvas.Visibility = Visibility.Hidden;
+                invoiceAddedCanvas.Visibility = Visibility.Visible;
+
+                // displays created invoice to the selected invoice datagrid
+                selectedInvoiceDataGrid.ItemsSource = logic.DisplayInvoie();
+
+                // displays invoice number
+                selectedInvoiceLbl.Content = "Selected Invoice #" + logic.selectedInvoice;
             }
-            else if (invoiceDate.Text == "")
+            catch (Exception ex)
             {
-                MessageBox.Show("Please select a date.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
+                //This is the top level method so we want to handle the exception
+                HandleError(MethodInfo.GetCurrentMethod().DeclaringType.Name,
+                            MethodInfo.GetCurrentMethod().Name, ex.Message);
             }
 
-            logic.SaveInvoice(invoiceDate.Text, logic.GetInvoiceCost());
-            addInvoiceCanvas.Visibility = Visibility.Hidden;
-            invoiceAddedCanvas.Visibility = Visibility.Visible;
-
-            selectedInvoiceDataGrid.ItemsSource = logic.DisplayInvoie();
         }
 
         /// <summary>
@@ -191,14 +289,25 @@ namespace Group_Project_Prototype.Main
         /// <param name="e"></param>
         private void editInvoiceBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (logic.selectedInvoice == 0)
+            try
             {
-                MessageBox.Show("You must search for an invoice first.");
-                return;
+                if (logic.selectedInvoice == 0)
+                {
+                    MessageBox.Show("You must search for an invoice first.");
+                    return;
+                }
+
+                // displays the edit invoice screen
+                itemEditCanvas.Visibility = Visibility.Visible;
+                invoiceAddedCanvas.Visibility = Visibility.Hidden;
+            }
+            catch (Exception ex)
+            {
+                //This is the top level method so we want to handle the exception
+                HandleError(MethodInfo.GetCurrentMethod().DeclaringType.Name,
+                            MethodInfo.GetCurrentMethod().Name, ex.Message);
             }
 
-            itemEditCanvas.Visibility = Visibility.Visible;
-            invoiceAddedCanvas.Visibility = Visibility.Hidden;
         }
 
         /// <summary>
@@ -208,19 +317,31 @@ namespace Group_Project_Prototype.Main
         /// <param name="e"></param>
         private void deleteInvoiceBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (logic.selectedInvoice == 0)
+            try
             {
-                MessageBox.Show("You must search for an invoice first.");
-                return;
+                if (logic.selectedInvoice == 0)
+                {
+                    MessageBox.Show("You must search for an invoice first.");
+                    return;
+                }
+
+                MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Are you sure you want to delete this invoice?", "Delete Confirmation", System.Windows.MessageBoxButton.YesNo);
+                if (messageBoxResult == MessageBoxResult.Yes)
+                {
+                    // deletes the selected invoice from the database
+                    logic.DeleteInvoice(logic.selectedInvoice);
+                    itemEditCanvas.Visibility = Visibility.Hidden;
+                    logic.selectedInvoice = 0;
+                    selectedInvoiceLbl.Content = "Selected Invoice";
+                }
+            }
+            catch (Exception ex)
+            {
+                //This is the top level method so we want to handle the exception
+                HandleError(MethodInfo.GetCurrentMethod().DeclaringType.Name,
+                            MethodInfo.GetCurrentMethod().Name, ex.Message);
             }
 
-            MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Are you sure you want to delete this invoice?", "Delete Confirmation", System.Windows.MessageBoxButton.YesNo);
-            if (messageBoxResult == MessageBoxResult.Yes)
-            {
-                logic.DeleteInvoice(logic.selectedInvoice);
-                itemEditCanvas.Visibility = Visibility.Hidden;
-                logic.selectedInvoice = 0;
-            }
         }
 
         /// <summary>
@@ -230,24 +351,36 @@ namespace Group_Project_Prototype.Main
         /// <param name="e"></param>
         private void selectedInvoiceDataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
-            Items.clsItem item = (Items.clsItem)selectedInvoiceDataGrid.SelectedItem;
-
-            if (item == null)
+            try
             {
-                return;
+                // casts selection to a clsItem object
+                Items.clsItem item = (Items.clsItem)selectedInvoiceDataGrid.SelectedItem;
+
+                if (item == null)
+                {
+                    return;
+                }
+
+                // gets the index of the selected item
+                selectedInvoiceSelectedItem = selectedInvoiceDataGrid.SelectedIndex;
+
+                selectedItemCostTxt.Text = item.Cost;
+                selectedItemDescTxt.Text = item.Desc;
+
+                ObservableCollection<Items.clsItem> itemsList = logic.GetItems();
+
+                for (int i = 0; i < itemsList.Count; i++)
+                {
+                    updateItemCbo.Items.Add(itemsList[i]);
+                }
+            }
+            catch (Exception ex)
+            {
+                //This is the top level method so we want to handle the exception
+                HandleError(MethodInfo.GetCurrentMethod().DeclaringType.Name,
+                            MethodInfo.GetCurrentMethod().Name, ex.Message);
             }
 
-            selectedInvoiceSelectedItem = selectedInvoiceDataGrid.SelectedIndex;
-
-            selectedItemCostTxt.Text = item.Cost;
-            selectedItemDescTxt.Text = item.Desc;
-
-            ObservableCollection<Items.clsItem> itemsList = logic.GetItems();
-
-            for (int i = 0; i < itemsList.Count; i++)
-            {
-                updateItemCbo.Items.Add(itemsList[i]);
-            }
         }
 
         /// <summary>
@@ -257,10 +390,21 @@ namespace Group_Project_Prototype.Main
         /// <param name="e"></param>
         private void updateItemCbo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Items.clsItem Item;
-            Item = (Items.clsItem)updateItemCbo.Items[updateItemCbo.SelectedIndex];
+            try
+            {
+                // casts selection to a clsItem object to get the cost
+                Items.clsItem Item;
+                Item = (Items.clsItem)updateItemCbo.Items[updateItemCbo.SelectedIndex];
 
-            newItemCostTxt.Text = "$" + Item.Cost;
+                newItemCostTxt.Text = "$" + Item.Cost;
+            }
+            catch (Exception ex)
+            {
+                //This is the top level method so we want to handle the exception
+                HandleError(MethodInfo.GetCurrentMethod().DeclaringType.Name,
+                            MethodInfo.GetCurrentMethod().Name, ex.Message);
+            }
+
         }
 
         /// <summary>
@@ -270,14 +414,23 @@ namespace Group_Project_Prototype.Main
         /// <param name="e"></param>
         private void saveUpdatesBtn_Click(object sender, RoutedEventArgs e)
         {
-            Items.clsItem Item;
-            Item = (Items.clsItem)updateItemCbo.Items[updateItemCbo.SelectedIndex];
+            try
+            {
+                Items.clsItem Item;
+                Item = (Items.clsItem)updateItemCbo.Items[updateItemCbo.SelectedIndex];
 
-            logic.UpdateDataGridItem(Item, selectedInvoiceSelectedItem);
+                logic.UpdateDataGridItem(Item, selectedInvoiceSelectedItem);
 
-            Items.clsItem item = (Items.clsItem)updateItemCbo.SelectedItem;
+                Items.clsItem item = (Items.clsItem)updateItemCbo.SelectedItem;
 
-            logic.UpdateInvoice(logic.selectedInvoice, selectedInvoiceSelectedItem+1, item.Code);
+                logic.UpdateInvoice(logic.selectedInvoice, selectedInvoiceSelectedItem + 1, item.Code);
+            }
+            catch (Exception ex)
+            {
+                //This is the top level method so we want to handle the exception
+                HandleError(MethodInfo.GetCurrentMethod().DeclaringType.Name,
+                            MethodInfo.GetCurrentMethod().Name, ex.Message);
+            }
         }
 
         /// <summary>
@@ -287,9 +440,20 @@ namespace Group_Project_Prototype.Main
         /// <param name="e"></param>
         private void deleteItemBtn_Click(object sender, RoutedEventArgs e)
         {
-            logic.DeleteWorkingInvoiceItem(workingInvoiceSelectedItem);
-            deleteItemBtn.Visibility = Visibility.Hidden;
-            totalCostTxtBox.Text = "$" + logic.GetInvoiceCost();
+            try
+            {
+                // deletes selected item from the working invoice
+                logic.DeleteWorkingInvoiceItem(workingInvoiceSelectedItem);
+                deleteItemBtn.Visibility = Visibility.Hidden;
+                totalCostTxtBox.Text = "$" + logic.GetInvoiceCost();
+            }
+            catch (Exception ex)
+            {
+                //This is the top level method so we want to handle the exception
+                HandleError(MethodInfo.GetCurrentMethod().DeclaringType.Name,
+                            MethodInfo.GetCurrentMethod().Name, ex.Message);
+            }
+
         }
 
         /// <summary>
@@ -299,16 +463,47 @@ namespace Group_Project_Prototype.Main
         /// <param name="e"></param>
         private void workingInvoiceDataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
-            Items.clsItem item = (Items.clsItem)workingInvoiceDataGrid.SelectedItem;
-
-            if (item == null)
+            try
             {
-                return;
+                // casts selection to a clsItem object
+                Items.clsItem item = (Items.clsItem)workingInvoiceDataGrid.SelectedItem;
+
+                if (item == null)
+                {
+                    return;
+                }
+
+                // the index to be removed
+                workingInvoiceSelectedItem = workingInvoiceDataGrid.SelectedIndex;
+                deleteItemBtn.Visibility = Visibility.Visible;
+            }
+            catch (Exception ex)
+            {
+                //This is the top level method so we want to handle the exception
+                HandleError(MethodInfo.GetCurrentMethod().DeclaringType.Name,
+                            MethodInfo.GetCurrentMethod().Name, ex.Message);
             }
 
-            // the index to be removed
-            workingInvoiceSelectedItem = workingInvoiceDataGrid.SelectedIndex;
-            deleteItemBtn.Visibility = Visibility.Visible;
+        }
+
+        /// <summary>
+        /// Handles errors.
+        /// </summary>
+        /// <param name="sClass"></param>
+        /// <param name="sMethod"></param>
+        /// <param name="sMessage"></param>
+        private void HandleError(string sClass, string sMethod, string sMessage)
+        {
+            try
+            {
+                //Would write to a file or database here.
+                MessageBox.Show(sClass + "." + sMethod + " -> " + sMessage);
+            }
+            catch (Exception ex)
+            {
+                System.IO.File.AppendAllText("C:\\Error.txt", Environment.NewLine +
+                                             "HandleError Exception: " + ex.Message);
+            }
         }
     }
 }

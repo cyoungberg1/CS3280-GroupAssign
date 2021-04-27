@@ -115,7 +115,7 @@ namespace Group_Project_Prototype.Search
                 //Just throw the exception
                 throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
                                     MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
-            }           
+            }
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace Group_Project_Prototype.Search
                 //Just throw the exception
                 throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
                                     MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
-            }            
+            }
         }
 
         /// <summary>
@@ -175,7 +175,7 @@ namespace Group_Project_Prototype.Search
                 //Just throw the exception
                 throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
                                     MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
-            }            
+            }
         }
     }
 }
